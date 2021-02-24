@@ -37,6 +37,7 @@ Vue.use(Router)
   }
  */
 
+const Index = () => import(/* webpackChunkName: 'index' */ '@/views/index')
 const Redirect = () => import(/* webpackChunkName: "redirect" */ '@/views/index/redirect')
 const Login = () => import(/* webpackChunkName: "login" */ '@/views/login/index')
 const Page404 = () => import(/* webpackChunkName: "404" */ '@/views/errorPage/404')
@@ -47,7 +48,19 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/anchor/anchorList'
+    redirect: '/index',
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: Index,
+        hidden: true,
+        meta: {
+          title: '首页',
+          icon: 'dashboard'
+        }
+      }
+    ]
   },
   {
     path: '/login',

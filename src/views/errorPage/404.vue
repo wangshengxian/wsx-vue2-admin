@@ -2,15 +2,16 @@
   <div class="wscn-http404-container">
     <div class="wscn-http404">
       <div class="pic-404">
-        <img class="pic-404__parent" src="@/assets/images/errorPage/404.png" alt="404">
-        <img class="pic-404__child left" src="@/assets/images/errorPage/404_cloud.png" alt="404">
-        <img class="pic-404__child mid" src="@/assets/images/errorPage/404_cloud.png" alt="404">
-        <img class="pic-404__child right" src="@/assets/images/errorPage/404_cloud.png" alt="404">
+        <img class="pic-404__parent" src="@/assets/images/errorPage/404.png" alt="404" />
+        <img class="pic-404__child left" src="@/assets/images/errorPage/404_cloud.png" alt="404" />
+        <img class="pic-404__child mid" src="@/assets/images/errorPage/404_cloud.png" alt="404" />
+        <img class="pic-404__child right" src="@/assets/images/errorPage/404_cloud.png" alt="404" />
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">哎呀!</div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">请检查您输入的网址是否正确，或点击下面的按钮返回首页。</div>
+        <!-- <p class="bullshit__return-home" @click="onHome">回到首页</p> -->
         <a href="" class="bullshit__return-home">回到首页</a>
       </div>
     </div>
@@ -18,20 +19,20 @@
 </template>
 
 <script>
-
 export default {
   name: 'Page404',
   computed: {
-    message () {
+    message() {
       return '无法进入该页面...'
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
 <style lang="less" scoped>
-.wscn-http404-container{
-  transform: translate(-50%,-50%);
+.wscn-http404-container {
+  transform: translate(-50%, -50%);
   position: absolute;
   top: 40%;
   left: 50%;

@@ -1,17 +1,12 @@
 <!--
- * @Author: wangshengxian
- * @Date: 2020-08-17 15:58:27
- * @LastEditors: wangshengxian
- * @LastEditTime: 2021-01-08 14:35:56
- * @Desc: 主播列表
+ 主播管理 - 主播列表
 -->
 <template>
   <div class="anchorList">
-    <div class="headerWrap">
-      <searchForm :formOptions="formOptions" :btnItems="btnItems" @onSearch="handleSearch" @onExport="handleExport">
-        <el-button slot="button" type="primary" size="mini" class="btn-add" @click="onAdd">添加主播</el-button>
-      </searchForm>
-    </div>
+    <searchForm :formOptions="formOptions" :btnItems="btnItems" @onSearch="handleSearch" @onExport="handleExport">
+      <el-button slot="button" type="primary" size="mini" class="btn-add" @click="onAdd">添加主播</el-button>
+    </searchForm>
+
     <div class="main">
       <el-tabs type="card" v-model="activeTabName" @tab-click="onTabClick">
         <el-tab-pane label="主播" name="first">
@@ -306,15 +301,6 @@ export default {
 </script>
 <style lang="less" scoped>
 //@import url(); 引入公共css类
-.headerWrap {
-  display: flex;
-  justify-content: space-between;
-  .operateBtnWrap {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-}
 
 /deep/ .el-table {
   .cell {
