@@ -1,4 +1,6 @@
-/** * 首页 */
+<!--
+  首页
+-->
 <template>
   <div class="main-index">
     <div class="dataCard">

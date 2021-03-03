@@ -22,7 +22,7 @@ const IncomeDetails = () => import(/* webpackChunkName: 'incomeDetails' */ '@/vi
 
 const anchorRouter = {
   path: '/anchor',
-  name: '/anchor',
+  name: 'Anchor',
   component: Layout,
   redirect: '/anchor/anchorList',
   alwaysShow: true,
