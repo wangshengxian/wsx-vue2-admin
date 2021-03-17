@@ -134,6 +134,12 @@ export default {
     // console.log('-video-upload-init-value-', this.value)
   },
   methods: {
+    getVideoEl(callback) {
+      this.$nextTick(() => {
+        let el = document.getElementById('videoDiv')
+        callback(el)
+      })
+    },
     // 同步 videoList
     syncVideoList(val) {
       const videoList = val || this.videoList
