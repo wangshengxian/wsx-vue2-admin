@@ -1,4 +1,11 @@
-// 字段转中文 - 全局
+/*
+ * @Author: wangshengxian
+ * @Date: 2020-09-28 17:02:47
+ * @LastEditors: wangshengxian
+ * @LastEditTime: 2021-01-26 11:32:01
+ * @Desc: 字段转中文 - 全局
+ */
+
 /**
  * 传v时返回匹配的label(用于转换中文)，
  * 不传v时返回data数组(用于el-select等数据)
@@ -43,14 +50,13 @@ export function getAuditStatus(v) {
 }
 
 /**
- * 是否显示
+ * 显示状态
  * 全局适用
  */
-export function getIsShow(v) {
+export function displayStatus(v) {
   const data = [
-    { value: '', label: '全部' },
-    { value: 1, label: '是' },
-    { value: 2, label: '否' }
+    { value: 1, label: '显示' },
+    { value: 2, label: '不显示' }
   ]
   return getData(data, v)
 }

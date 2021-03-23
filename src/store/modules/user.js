@@ -1,10 +1,9 @@
 // import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, getGuildId, setGuildId, removeGuildId } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  guildId: getGuildId(),
   name: '',
   avatar: '',
   introduction: '',
@@ -15,9 +14,7 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_GUILDID: (state, guildId) => {
-    state.guildId = guildId
-  },
+
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
   },
@@ -40,9 +37,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         commit('SET_TOKEN', userInfo.key)
-        commit('SET_GUILDID', userInfo.id)
         setToken(userInfo.key)
-        setGuildId(userInfo.id)
         resolve()
       }, 100)
     })
@@ -88,10 +83,8 @@ const actions = {
   logout({ commit, state, dispatch }) {
     console.log('-------11-------')
     commit('SET_TOKEN', '')
-    commit('SET_GUILDID', '')
     commit('SET_ROLES', [])
     removeToken()
-    removeGuildId()
     resetRouter()
     dispatch('tagsView/delAllViews', null, { root: true })
   },
@@ -100,10 +93,8 @@ const actions = {
   resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
-      commit('SET_GUILDID', '')
       commit('SET_ROLES', [])
       removeToken()
-      removeGuildId()
       resolve()
     })
   },

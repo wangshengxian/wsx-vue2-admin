@@ -46,6 +46,7 @@
     "vue-video-player": "^5.0.2",
     "vuedraggable": "^2.23.2",
     "vuex": "3.1.0",
+    "wcs-js-sdk": "^1.0.9",
     "xlsx": "0.14.1"
   },
   "devDependencies": {

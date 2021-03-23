@@ -3,7 +3,7 @@
 -->
 <template>
   <div class="cascader">
-    <el-cascader ref="cascaderRef" v-model="currValue" :options="options" :props="configObj"></el-cascader>
+    <el-cascader ref="cascaderRef" v-model="currValue" :options="options" :props="configObj" clearable></el-cascader>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
         lazy: true,
         lazyLoad(node, resolve) {
           const { level } = node
-          console.log(level)
+          console.log('-level-', level)
           // if (level >= 2) {
           //   resolve()
           //   return

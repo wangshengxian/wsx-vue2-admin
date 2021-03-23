@@ -8,7 +8,10 @@
       <cardBox :list="infoList" />
     </div>
     <div class="mainWrap">
-      <cascader v-model="cascaderVal" :options="cascaderList" />
+      <div class="groupBox">
+        <p class="labelTxt">三级联动--动态获取数据:</p>
+        <cascader v-model="cascaderVal" :options="cascaderList" />
+      </div>
     </div>
   </div>
 </template>
@@ -63,10 +66,22 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-width: 1120px;
     padding-bottom: 50px;
 
     .welcome {
       font-size: 32px;
+    }
+  }
+}
+
+.mainWrap {
+  .groupBox {
+    display: flex;
+    align-items: center;
+
+    .labelTxt {
+      margin-right: 10px;
     }
   }
 }

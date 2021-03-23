@@ -12,7 +12,7 @@
         <img src="@/assets/images/logo.png" alt="" />
       </div>
       <div class="title-container">
-        <h3 class="title">公会管理后台</h3>
+        <h3 class="title">运营管理后台</h3>
       </div>
 
       <el-form-item prop="username">
@@ -67,25 +67,26 @@
 </template>
 
 <script>
-// import { validUsername } from '@/utils/validate'
 import { login } from '@/api/login'
-// import md5 from 'js-md5'
+import md5 from 'js-md5'
 import { setUsername, setPassword, getUsername, getPassword } from '@/utils/auth'
 
-const env = 'dev'
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      callback()
+      if (!value) {
+        callback(new Error('用户名不能为空'))
+      } else {
+        callback()
+      }
     }
     const validatePassword = (rule, value, callback) => {
-      if (env === 'dev') {
-        callback()
+      if (!value) {
+        callback(new Error('密码不能为空'))
       } else {
-        if (value.length < 6) {
-          // 正式服
-          callback(new Error('密码长度不少于6位'))
+        if (value.length < 6 || value.length > 16) {
+          callback(new Error('密码长度必须在6到16位之间'))
         } else {
           callback()
         }
@@ -122,7 +123,12 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    const pass = this.loginForm.password
+    // TODO: pass为Number类型需要转化成字符串类型，否则会报错
+    if (typeof pass === 'number') {
+      this.loginForm.password = pass + ''
+    }
+    // console.log('-pass-', this.loginForm.password)
   },
   mounted() {
     if (this.loginForm.username === '') {
@@ -153,8 +159,8 @@ export default {
           this.loading = true
           const data = {
             account: username,
-            pwd: password // 测试服
-            // pwd: md5.hex(password) // 正式服待定
+            // pwd: password // 测试服
+            pwd: md5.hex(password) // 正式服待定
           }
           login(data)
             .then(res => {
@@ -169,7 +175,8 @@ export default {
               this.$store
                 .dispatch('user/login', res.data)
                 .then(() => {
-                  this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                  this.$router.push({ path: '/' }) // TODO: 有权限控制的话，默认跳转到首页
+                  // this.$router.push({ path: this.redirect || '/', query: this.otherQuery }) // TODO: 没有权限控制的话，重新登录跳转到最后一次打开的界面
                   this.loading = false
                 })
                 .catch(() => {

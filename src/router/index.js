@@ -13,7 +13,7 @@ const modulesFiles = require.context('./modules', false, /\.js$/)
 
 const modulesRouters = modulesFiles.keys().reduce((total, curr) => {
   const value = modulesFiles(curr)
-  console.log('-value-', value)
+  // console.log('-value-', value)
   return total.concat([value.default])
 }, [])
 

@@ -6,7 +6,7 @@
  * @Desc: 全局设置模块
  */
 module.exports = {
-  title: '唐僧公会后台',
+  title: '唐僧运营后台',
 
   /**
    * @type {boolean} true | false

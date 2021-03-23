@@ -153,19 +153,18 @@ export default {
   },
 
   mounted() {
-    // console.log('-imgupload-', this.value)
+    // console.log('-img-upload-', this.value)
     if (this.value.length > 0) {
       // console.log('-sync-')
       this.syncElUpload()
     }
-    console.log('-img-upload-init-value-', this.value)
   },
 
   methods: {
     // 同步el-upload数据
     syncElUpload(val) {
       const imgList = val || this.imgList
-      // console.log('111', '-img-list-', imgList)
+      console.log('-sync-img-list-', imgList)
       this.$refs.uploadRef.uploadFiles = imgList.map((v, i) => {
         // console.log(v)
         return {
@@ -181,19 +180,21 @@ export default {
       console.log('-handle-http-request-', a, a.file)
       const formData = new FormData()
       formData.append('pics', a.file)
-      console.log('-formdata-', formData)
       uploadImgOrVideo(formData)
         .then(res => {
           console.log('-res-', res)
           if (res.code === 200) {
             this.$message({ type: 'success', message: '上传成功！' })
-            this.imgList.push(res.data[0].picUrl)
+            // TODO: push操作不能触发 计算属性中imgList的 set 方法
+            const picUrl = res.data[0].picUrl
+            // this.imgList.push(picUrl)
+            this.imgList = [...this.imgList, picUrl]
             this.isUploading = false
             this.$emit('success', this.imgList)
           }
         })
         .catch(err => {
-          // TODO 上传失败后需要同步 fileList,否则再次上传同一张图片会出现占位bug
+          // TODO: 上传失败后需要同步 fileList,否则再次上传同一张图片会出现占位bug
           console.log('__ERROR__', err)
           this.$message({ type: 'error', message: err.msg })
           this.isUploading = false
@@ -219,13 +220,11 @@ export default {
                 reject(new Error())
               }
             })
-          // console.log('-before-upload--', 111, '压缩图片')
         })
       } else {
-        // console.log('-before-upload--', 111, '不压缩图片')
         if (validImgUpload(file, this.size)) {
+          // console.log('正在上传。。。')
           this.isUploading = true
-          console.log('正在上传。。。')
           return true
         } else {
           return false
@@ -261,7 +260,7 @@ export default {
     },
     // 超限
     onExceed(file, fileList) {
-      console.log('超限', file, fileList)
+      console.log('-超限-', file, fileList)
       this.$refs.uploadRef.abort() // 取消剩余接口请求
       this.syncElUpload()
       this.$message({

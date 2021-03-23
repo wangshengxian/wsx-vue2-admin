@@ -1,85 +1,78 @@
 /*
  * @Author: wangshengxian
- * @Date: 2020-08-17 16:11:33
+ * @Date: 2020-08-19 09:57:01
  * @LastEditors: wangshengxian
- * @LastEditTime: 2020-10-22 14:23:12
- * @Desc: 主播管理路由模块
+ * @LastEditTime: 2020-10-27 14:24:21
+ * @Desc: 主播管理 - router
  */
 import Layout from '@/views/layout'
 
-// 直播列表
-const AnchorList = () => import(/* webpackChunkName: 'anchorList' */ '@/views/anchor/anchorList')
+const AnchorList = () => import(/* webpackChunkName: "AnchorList" */ '@/views/anchor/anchorList')
+const AnchorApplication = () => import(/* webpackChunkName: "AnchorApplication" */ '@/views/anchor/anchorApplication')
+const RecommendConfig = () => import(/* webpackChunkName: "RecommendConfig" */ '@/views/anchor/recommendConfig')
+const IncomeDetails = () => import(/* webpackChunkName: 'IncomeDetails' */ '@/views/anchor/incomeDetails')
+const RecordedList = () => import(/* webpackChunkName: 'recordedList' */ '@/views/anchor/recordedList')
 
-// 直播时长
-const LiveTime = () => import(/* webpackChunkName: 'liveTime' */ '@/views/anchor/liveTime')
-
-// 收入明细
-const IncomeDetails = () => import(/* webpackChunkName: 'incomeDetails' */ '@/views/anchor/incomeDetails')
-
-// 直播分析
-// const AnchorAnalyze = () => import(/* webpackChunkName: 'anchorAnalyze' */ '@/views/anchor/anchorAnalyze')
-// const AnalyzeList = () => import(/* webpackChunkName: 'analyzeList' */ '@/views/anchor/anchorAnalyze/analyzeList')
+const hidden = process.env.VUE_APP_SERVER_ENV === 'prod'
+// console.log(process.env.VUE_APP_SERVER_ENV)
 
 const anchorRouter = {
   path: '/anchor',
-  name: 'Anchor',
   component: Layout,
+  name: 'Anchor',
   redirect: '/anchor/anchorList',
   alwaysShow: true,
   meta: {
     title: '主播管理',
-    icon: 'union'
+    icon: 'anchor'
   },
   children: [
     {
       path: 'anchorList',
-      name: 'AnchorList',
       component: AnchorList,
+      name: 'AnchorList',
       meta: {
         title: '主播列表',
         icon: 'menu'
       }
     },
     {
-      path: 'liveTime',
-      name: 'LiveTime',
-      component: LiveTime,
+      path: 'anchorApplication',
+      component: AnchorApplication,
+      name: 'AnchorApplication',
       meta: {
-        title: '直播时长',
+        title: '主播申请',
+        icon: 'menu'
+      }
+    },
+    {
+      path: 'recommendConfig',
+      component: RecommendConfig,
+      name: 'RecommendConfig',
+      meta: {
+        title: '推荐配置',
         icon: 'menu'
       }
     },
     {
       path: 'incomeDetails',
-      name: 'IncomeDetails',
       component: IncomeDetails,
+      name: 'IncomeDetails',
       meta: {
         title: '收入明细',
         icon: 'menu'
       }
+    },
+    {
+      path: 'recordedList',
+      name: 'RecordedList',
+      component: RecordedList,
+      hidden: hidden,
+      meta: {
+        title: '录播列表',
+        icon: 'menu'
+      }
     }
-    // {
-    //   path: 'anchorAnalyze',
-    //   name: 'AnchorAnalyze',
-    //   component: AnchorAnalyze,
-    //   redirect: '/anchor/anchorAnalyze/analyzeList',
-    //   alwaysShow: true,
-    //   meta: {
-    //     title: '主播分析',
-    //     icon: 'menu'
-    //   },
-    //   children: [
-    //     {
-    //       path: 'analyzeList',
-    //       name: 'AnalyzeList',
-    //       component: AnalyzeList,
-    //       meta: {
-    //         title: '分析列表'
-    //       }
-    //     },
-
-    //   ]
-    // }
   ]
 }
 

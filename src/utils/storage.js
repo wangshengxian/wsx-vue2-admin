@@ -9,7 +9,7 @@ import tools from './tools'
  * @param {any} value 键值
  * @param {number} hours 存储时间 (小时) (可选)
  */
-function setItem (key, value, hours) {
+function setItem(key, value, hours) {
   if (hours !== undefined && typeof hours === 'number') {
     const expire = tools.formatDate(new Date().getTime() + hours * 3600 * 1000)
     value = { value, expire }
@@ -21,8 +21,9 @@ function setItem (key, value, hours) {
 }
 
 // 获取item
-function getItem (key) {
+function getItem(key) {
   let data = localStorage.getItem(key)
+  // TODO: 字符串调用 JSON.parse() 会报错，走 catch ，纯数字类型的字符串通过调用 JSON.parse() 类型会转化成 Number类型
   try {
     data = JSON.parse(data)
   } catch (err) {
@@ -40,7 +41,7 @@ function getItem (key) {
 }
 
 // 移除item
-function removeItem (key) {
+function removeItem(key) {
   localStorage.removeItem(key)
 }
 

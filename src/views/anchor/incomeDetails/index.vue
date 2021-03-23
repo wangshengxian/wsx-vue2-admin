@@ -2,7 +2,7 @@
  * @Author: wangshengxian
  * @Date: 2020-08-19 09:57:01
  * @LastEditors: wangshengxian
- * @LastEditTime: 2021-01-08 14:25:46
+ * @LastEditTime: 2020-11-06 17:24:52
  * @Desc: 主播管理 - 收入明细
 -->
 <template>
@@ -56,6 +56,7 @@ export default {
       btnItems: 'search,export',
       searchData: {
         infoSearch: '',
+        guildId: '',
         startDate: '',
         endDate: ''
       },
@@ -81,6 +82,13 @@ export default {
           element: 'el-input',
           initValue: '',
           placeholder: '请输入ID/昵称'
+        },
+        {
+          label: '公会ID',
+          prop: 'guildId',
+          element: 'el-input',
+          initValue: '',
+          placeholder: '请输入公会ID'
         },
 
         {
@@ -114,12 +122,13 @@ export default {
     handleSearch(data) {
       console.log('-search-', data)
       this.searchData.infoSearch = data.infoSearch
+      this.searchData.guildId = data.guildId ? +data.guildId : data.guildId
       this.searchData.startDate = data.times ? data.times[0] : ''
       this.searchData.endDate = data.times ? data.times[1] : ''
       this.getInitData()
     },
     handleExport() {
-      console.log('-export-params-', this.searchData)
+      // console.log('-export-params-', this.searchData)
       exportExcel('incomeList', this.searchData)
     },
     currentChange(pageNo) {
@@ -133,6 +142,7 @@ export default {
       this.giftDetailsObj = item
       this.isGift = true
       this.$nextTick(() => {
+        // console.log(this.$refs.myChild)
         this.$refs.myChild.initCharts()
       })
     },

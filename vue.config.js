@@ -28,7 +28,7 @@ console.log('-----serverEnv', process.env.VUE_APP_SERVER_ENV)
 console.log('-----nodeEnv', process.env.NODE_ENV)
 console.log('-----serverUrl', process.env.VUE_APP_SERVER_URL)
 
-const projectName = 'tsunion'
+const projectName = 'tslive'
 
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? `/${projectName}/` : '/', // 基本路径
@@ -46,13 +46,13 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/livelms': {
+      '/livecms': {
         target: process.env.VUE_APP_SERVER_URL,
         ws: true,
         changeOrigin: true,
         secure: false
         // pathRewrite: {
-        //   '^/livelms': ''
+        //   '^/livecms': ''
         // }
       }
     }

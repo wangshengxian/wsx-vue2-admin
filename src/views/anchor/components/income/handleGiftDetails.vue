@@ -2,19 +2,19 @@
  * @Author: wangshengxian
  * @Date: 2020-10-16 11:22:26
  * @LastEditors: wangshengxian
- * @LastEditTime: 2020-10-22 14:19:56
+ * @LastEditTime: 2020-10-26 10:20:34
  * @Desc: 收入明细 - 礼物流水详情
 -->
 <template>
   <div class="">
-    <el-dialog title="" width="900px" center :visible.sync="dialogVisible" @close="handleClose">
+    <el-dialog title="" width="900px" :top="dialogStyle.top" center :visible.sync="dialogVisible" @close="handleClose">
       <div class="headerBox">
         <p class="title">礼物流水明细</p>
         <searchForm :formOptions="formOptions" @onSearch="handleSearch" />
       </div>
       <!-- 图表 -->
       <div class="dataChart">
-        <div id="giftChart" :style="{ width: chartWidth }"></div>
+        <div id="giftChart" :style="{ width: chartWidth, height: dialogStyle.height }"></div>
       </div>
     </el-dialog>
   </div>
@@ -29,12 +29,16 @@ export default {
   name: '',
   data() {
     return {
+      dialogStyle: {
+        top: '15vh',
+        height: '540px'
+      },
       myChart: null,
       chartWidth: '100%',
       titleText: '', // 没有数据时的标题
       emptyShow: true, // 暂时标题与否
       barWidth: '20%', // 柱状图柱子的宽度
-      initDate: tools.getLatelyDays(30, '{y}-{m}-{d} {h}:{i}:{s}'),
+      initTimes: tools.getLatelyDays(30, '{y}-{m}-{d} {h}:{i}:{s}'),
       searchData: {
         startDate: '',
         endDate: ''
@@ -71,13 +75,12 @@ export default {
       }
     },
     formOptions() {
-      // console.log("")
       return [
         {
           element: 'el-date-picker',
           label: '时间',
           prop: 'times',
-          initValue: this.initDate,
+          initValue: this.initTimes,
           placeholder: ''
         }
       ]
@@ -209,36 +212,43 @@ export default {
     formData: {
       handler(val) {
         console.log('-watch-gift-details-formdata-', val)
-        this.initDate = tools.getLatelyDays(30, '{y}-{m}-{d} {h}:{i}:{s}')
-        console.log(this.initDate)
-        this.searchData.startDate = this.initDate[0]
-        this.searchData.endDate = this.initDate[1]
+        this.initTimes = tools.getLatelyDays(30, '{y}-{m}-{d} {h}:{i}:{s}')
+        this.searchData.startDate = this.initTimes[0]
+        this.searchData.endDate = this.initTimes[1]
         this.getData()
       },
       deep: true
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.setDialogHeight()
+  },
   updated() {},
   methods: {
+    // 设置礼物流水详情dialog图表高度
+    setDialogHeight() {
+      let rate = window.screen.height / 1080
+      this.dialogStyle.height = rate * 540 + 'px'
+      this.dialogStyle.top = rate * 15 + 'vh'
+      console.log(this.dialogStyle)
+    },
     handleClose() {
       console.log('-close-')
     },
     initCharts() {
-      let domEl = document.querySelector('#giftChart')
-      this.myChart = echarts.init(domEl, 'light')
+      this.myChart = echarts.init(document.querySelector('#giftChart'), 'light')
       this.myChart.resize()
-      // console.log('-myChart-', myChart)
+      // console.log('-myChart-', this.myChart)
       this.myChart.showLoading('default', {
         test: '飞速加载中',
         coloe: '#409eff'
       })
+      console.log(this.giftChartOptions)
       this.myChart.setOption(this.giftChartOptions)
       this.myChart.hideLoading()
     },
     handleSearch(data) {
-      console.log('-data-', data)
       this.searchData.startDate = data.times ? data.times[0] : ''
       this.searchData.endDate = data.times ? data.times[1] : ''
       this.getData()
@@ -251,7 +261,6 @@ export default {
         const list = res.data
         if (list.length > 0) {
           this.emptyShow = false
-          // this.titleText = '有数据'
         } else {
           this.emptyShow = true
           this.titleText = '当前时间段没有数据！'
@@ -315,7 +324,7 @@ export default {
 
   & > div {
     width: 100%;
-    height: 540px;
+    // height: 540px;
   }
 }
 .headerBox {

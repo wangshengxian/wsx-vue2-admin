@@ -1,8 +1,8 @@
 .DS_Store
 node_modules/
 dist/
-/tsunion
-/tsunion.zip
+/tslive
+/tslive.zip
 
 npm-debug.log*
 yarn-debug.log*

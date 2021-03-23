@@ -1,13 +1,9 @@
 <!--
- * @Author: wangshengxian
- * @Date: 2020-08-17 16:04:09
- * @LastEditors: wangshengxian
- * @LastEditTime: 2020-08-17 16:24:08
- * @Desc: 主播分析路由入口
+   添加video
 -->
 <template>
-  <div class="">
-    <router-view />
+  <div class="addVideo">
+    add-video组件
   </div>
 </template>
 
@@ -18,10 +14,10 @@ export default {
     return {}
   },
   computed: {},
+  components: {},
   created() {},
   mounted() {},
-  methods: {},
-  components: {}
+  methods: {}
 }
 </script>
 <style lang="less" scoped>

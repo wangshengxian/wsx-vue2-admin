@@ -8,7 +8,7 @@
 import storage from './storage'
 
 // token存取----------------------------------------------
-const TokenKey = 'union-key'
+const TokenKey = 'ts_live-key'
 // const TokenKey = 'Admin-Token'
 // token过期时间 (小时)
 const TokenExpire = 24
@@ -25,25 +25,8 @@ export function removeToken() {
   storage.removeItem(TokenKey)
 }
 
-// guildId存取----------------------------------------------
-const GuildId = 'union-guildid'
-// guildId过期时间 (小时)
-const GuildIdExpire = 24
-
-export function getGuildId() {
-  return storage.getItem(GuildId)
-}
-
-export function setGuildId(token) {
-  storage.setItem(GuildId, token, GuildIdExpire)
-}
-
-export function removeGuildId() {
-  storage.removeItem(GuildId)
-}
-
 // username存取------------------------------------------
-const UsernameKey = 'union-username'
+const UsernameKey = 'ts_live-username'
 
 export function getUsername() {
   return storage.getItem(UsernameKey)
@@ -58,7 +41,7 @@ export function removeUsername() {
 }
 
 // password存储(TODO: 只在测试服存储，正式服不作存储，若要存储需要设置一个过期时间)------------------------------------------------
-const Password = 'union-password'
+const Password = 'ts_live-password'
 
 export function getPassword() {
   return storage.getItem(Password)

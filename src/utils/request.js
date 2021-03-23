@@ -13,6 +13,7 @@ import { Message } from 'element-ui'
 console.log('-req-url-', process.env.VUE_APP_SERVER_URL, '-env-', process.env.NODE_ENV)
 // 基础配置
 const service = axios.create()
+
 /**
  * 请求拦截 config配置项
  * @params {string} url 接口地址
@@ -22,7 +23,7 @@ const service = axios.create()
  */
 service.interceptors.request.use(
   config => {
-    config.baseURL = process.env.NODE_ENV === 'production' ? `${process.env.VUE_APP_SERVER_URL}/livelms` : '/livelms'
+    config.baseURL = process.env.NODE_ENV === 'production' ? `${process.env.VUE_APP_SERVER_URL}/livecms` : '/livecms'
     config.timeout = config.timeout || 50000
     config.headers['Content-Type'] = 'application/json;charset=UTF-8'
     // 携带token
@@ -74,7 +75,7 @@ service.interceptors.response.use(
         duration: 1 * 1000
       })
     }
-    return Promise.reject(res.msg)
+    return Promise.reject(res)
   },
   error => {
     console.log('_ERROR_', error)

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import picker from '@/utils/pickerOptions'
+import picker from '@/const/pickerOptions'
 
 export default {
   inheritAttrs: false,
