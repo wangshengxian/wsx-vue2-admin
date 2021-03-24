@@ -1,7 +1,7 @@
 <template>
   <div class="userList">
     <searchForm :formOptions="formOptions" @onSearch="handleSearch">
-      <el-button slot="button" size="mini" type="primary" class="btn-search" @click="onAddVideo">上传视频</el-button>
+      <el-button slot="button" size="mini" type="primary" class="btn-search" @click="onUploadVideo">上传视频</el-button>
     </searchForm>
 
     <div class="listWrap">
@@ -64,12 +64,12 @@
       />
     </div>
 
-    <addVideo
+    <uploadVideo
       :type="dialogType"
-      :videoUrl.sync="addVideoUrl"
-      :infoData="infoData"
-      :visible.sync="isShowAddVideo"
-      @success="handleAddVideoSuccess"
+      :formData="infoData"
+      :videoUrl.sync="uploadVideoUrl"
+      :visible.sync="isShowUploadVideo"
+      @success="handleUploadVideoSuccess"
     />
 
     <videoPlay :dialogVisible.sync="isVideoPlay" width="300px" :videoUrl="videoUrl" />
@@ -86,7 +86,7 @@
 <script>
 import searchForm from '@/components/searchForm'
 import pagination from '@/components/pagination'
-import addVideo from '@/views/content/components/vshortVideo/addVideo'
+import uploadVideo from '@/views/content/components/vshortVideo/handleUploadVideo'
 import videoPlay from '@/components/videoPlayDialog'
 import auditDialog from '@/components/auditDialog'
 import { shortVideoAuditTemplate } from '@/filters/auditTemplate'
@@ -120,8 +120,8 @@ export default {
 
       // 上传/编辑短视频
       dialogType: 'add',
-      isShowAddVideo: false,
-      addVideoUrl: [],
+      isShowUploadVideo: false,
+      uploadVideoUrl: [],
       infoData: {
         userId: '', // 用户id
         title: '', // 标题
@@ -132,7 +132,7 @@ export default {
       }
     }
   },
-  components: { searchForm, pagination, auditDialog, addVideo, videoPlay },
+  components: { searchForm, pagination, auditDialog, uploadVideo, videoPlay },
   computed: {
     reasonList() {
       return shortVideoAuditTemplate()
@@ -194,7 +194,7 @@ export default {
     sizeChange(pageSize) {
       this.getInitData(1, pageSize)
     },
-    handleAddVideoSuccess() {
+    handleUploadVideoSuccess() {
       this.getInitData()
     },
     // 审核不通过
@@ -203,20 +203,20 @@ export default {
       const params = { content, status: 'FAIL', id: this.selectData.id }
       this.auditReq(params)
     },
-    onAddVideo() {
+    onUploadVideo() {
       this.infoData = { userId: '', title: '', coin: '', cover: [] }
-      this.addVideoUrl = []
+      this.uploadVideoUrl = []
       this.dialogType = 'add'
-      this.isShowAddVideo = true
+      this.isShowUploadVideo = true
     },
     // 编辑
     onEditVideo(row) {
       console.log('-edit-', row)
       const { id, userId, title, coin, cover, url } = row
       this.infoData = { id, userId, title, coin, cover: [cover] }
-      this.addVideoUrl = [url]
+      this.uploadVideoUrl = [url]
       this.dialogType = 'edit'
-      this.isShowAddVideo = true
+      this.isShowUploadVideo = true
     },
     // 上下架
     onDownUp(row) {
