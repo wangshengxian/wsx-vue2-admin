@@ -143,7 +143,6 @@ export default {
   watch: {
     value: {
       handler(val) {
-        // console.log('-img-upload-', this.value, this.isFirstMount)
         if (this.isFirstMount && this.value.length > 0) {
           this.syncElUpload()
         }
@@ -153,9 +152,7 @@ export default {
   },
 
   mounted() {
-    // console.log('-img-upload-', this.value)
     if (this.value.length > 0) {
-      // console.log('-sync-')
       this.syncElUpload()
     }
   },
@@ -236,7 +233,8 @@ export default {
       console.log('-upload-success-')
       if (res.files) {
         if (this.imgList.length < this.limit) {
-          this.imgList.push(res.files.file)
+          // this.imgList.push(res.files.file)
+          this.imgList = [...this.imgList, res.files.file]
         }
       } else {
         this.syncElUpload()

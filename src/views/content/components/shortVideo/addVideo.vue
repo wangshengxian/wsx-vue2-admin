@@ -81,13 +81,14 @@
 <script>
 import imgUpload from '@/components/imgUpload'
 import videoUpload from '@/components/videoUpload'
-import { getWsUploadToken } from '@/api/common'
 import { insertShortVideo } from '@/api/content'
-import wsObj from '@/utils/wcsUpload'
+import largeFileUpload from '@/utils/wcsUpload'
+import { resourceUrl } from '@/const/global'
 export default {
   name: '',
   data() {
     return {
+      uploadObj: null, // 上传文件实例
       imgUrl: [],
       videoUrl: [],
       infoData: {
@@ -168,9 +169,8 @@ export default {
     // 确认提交
     onComfirm() {
       this.validFunc(() => {
-        const midArr = this.videoUrl[0].split('/')
         let params = { ...this.infoData }
-        params.url = midArr[midArr.length - 1]
+        params.url = this.videoUrl[0]
         params.photo = this.imgUrl[0]
         delete params.categoryName
         console.log('-params-', params)
@@ -212,53 +212,45 @@ export default {
     // 视频上传 (自定义上传)
     handleHttpRequest(a) {
       // console.log('-自定义上传-', a)
-      const params = { fileName: a.file.name }
-      getWsUploadToken(params).then(res => {
-        console.log('-res-', res)
-        const { fileName, token } = res.data
-        const copyFile = new File([a.file], fileName) // 更改file.name,此处不可直接修改name
-        this.uploadReqFunc(copyFile, token, data => {
-          console.log('-data-', data)
-          this.$message({
-            message: '上传成功!',
-            type: 'success'
-          })
-          this.videoUrl = [`http://video.85tstss.com/${fileName}`]
-          console.log('-video-url-', this.videoUrl)
-        })
+      largeFileUpload(a.file).then(res => {
+        this.uploadObj = res
+        // console.log('-upload-obj-', uploadObj, uploadObj.file.name)
+        this.isShowProgress = true
+        this.uploadProgressVal = 0
+        this.uploadObj.uploadProgress = this.handleProgress
+        this.uploadObj.onComplete = this.handleComplete
+        this.uploadObj.onError = this.handleError
       })
     },
-    // 网宿上传文件
-    uploadReqFunc(file, token, callback) {
-      const uploadObj = wsObj.createWcsUploadObj(file, token)
-      // console.log('-upload-obj-', uploadObj)
-      this.isShowProgress = true
+    handleProgress(progress) {
+      console.log('-progress-', progress)
+      this.uploadProgressVal = Math.floor(progress.total.percent)
+      console.log('-已经完成-', this.uploadProgressVal + '%')
+    },
+    handleComplete(res) {
+      // console.log('-res-', res)
+      this.isShowProgress = false
       this.uploadProgressVal = 0
-      uploadObj.putFile()
-      uploadObj.uploadProgress = progress => {
-        // console.log('-progress-', progress)
-        this.uploadProgressVal = Math.floor(progress.total.percent)
-        // console.log('-已经完成-', this.uploadProgressVal + '%')
+      this.$refs.videoUploadRef.isUploading = false // 关闭上传状态
+      if (res.data.code) {
+        console.log('-error-')
+        return
       }
-      uploadObj.onComplete = res => {
-        console.log('-res-', res)
-        this.isShowProgress = false
-        this.uploadProgressVal = 0
-        this.$refs.videoUploadRef.isUploading = false // 关闭上传状态
-        if (res.data.code) {
-          // callback('error')
-          console.log('-error-')
-          return
-        }
-        callback(res)
-      }
-      uploadObj.onError = error => {
-        // {code: 401, message: "客户端认证授权失败。请重试或提交反馈。", isRequestError: true}
-        console.log('error', error)
-        this.$message({ type: 'error', message: error.message })
-        this.$refs.videoUploadRef.isUploading = false
-        this.$refs.videoUploadRef.syncVideoList()
-      }
+      this.$message({
+        message: '上传成功!',
+        type: 'success'
+      })
+      this.videoUrl.push(`${resourceUrl}/${this.uploadObj.file.name}`)
+      console.log('-video-url-', this.videoUrl)
+    },
+    handleError(error) {
+      // {code: 401, message: "客户端认证授权失败。请重试或提交反馈。", isRequestError: true}
+      console.log('error', error)
+      this.$message({ type: 'error', message: error.message })
+      this.isShowProgress = false
+      this.uploadProgressVal = 0
+      this.$refs.videoUploadRef.isUploading = false
+      this.$refs.videoUploadRef.syncVideoList()
     }
   }
 }

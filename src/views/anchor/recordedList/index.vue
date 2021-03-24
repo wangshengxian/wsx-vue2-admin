@@ -98,6 +98,7 @@ export default {
       const message = `是否清除ID:${useridx}主播房间?`
       this.confirmFunc(message, (instance, done) => {
         const params = { type: 2, anchorId: useridx }
+        console.log('-params-', params)
         this.clearAnchorRoomReq(params, instance, done)
       })
     },
@@ -116,7 +117,7 @@ export default {
         })
       })
     },
-    clearRoomReq(params, instance, done) {
+    clearAnchorRoomReq(params, instance, done) {
       operateAnchorRoom(params).then(res => {
         done()
         setTimeout(() => {

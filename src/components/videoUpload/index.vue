@@ -87,10 +87,7 @@ export default {
       default: 1
     },
     httpRequest: {
-      type: Function,
-      default: function() {
-        return () => {}
-      }
+      type: Function
     }
   },
   computed: {
@@ -118,7 +115,6 @@ export default {
     value: {
       handler(newVal, oldVal) {
         // console.log('-watch-video-value-', newVal)
-        // console.log(this.$refs.uploadRef.uploadFiles)
         if (this.isFirstMount && this.value.length > 0) {
           this.syncVideoList()
         }
@@ -131,7 +127,6 @@ export default {
     if (this.value.length > 0) {
       this.syncVideoList()
     }
-    // console.log('-video-upload-init-value-', this.value)
   },
   methods: {
     getVideoEl(callback) {
@@ -154,12 +149,13 @@ export default {
       })
       this.isFirstMount = false
     },
-    // 上传完单个视频，当通过自定义上传时，该回调不会被触发
+    // TODO:上传完单个视频，当通过自定义上传时，该回调不会被触发
     onSuccess(res, file, fileList) {
       // console.log('-success-upload-video-', res, file, fileList)
       if (res.files) {
         if (this.videoList.length < this.limit) {
-          this.videoList.push(res.files.file)
+          // this.videoList.push(res.files.file)
+          this.videoList = [...this.videoList, res.files.file]
         }
       } else {
         this.syncVideoList()
@@ -193,6 +189,11 @@ export default {
     // 自定义上传
     handleHttpRequest(a) {
       console.log('-video-http-request-', a)
+      if (this.httpRequest) {
+        // 重新定义上传
+        this.httpRequest(a)
+        return
+      }
       const formData = new FormData()
       formData.append('pics', a.file)
       console.log('-formdata-', formData)
@@ -201,13 +202,16 @@ export default {
           if (res.code === 200) {
             console.log('-res-', res)
             this.$message({ type: 'success', message: '上传成功！' })
-            this.videoList.push(res.data[0].picUrl)
+            // TODO: push操作不能触发计算属性中videoList的et方法
+            const picUrl = res.data[0].picUrl
+            // this.videoList.push(picUrl)
+            this.videoList = [...this.videoList, picUrl]
             this.isUploading = false
             this.$emit('success', this.videoList)
           }
         })
         .catch(err => {
-          // TODO 上传失败后需要同步 fileList,否则再次上传同一张图片会出现占位bug
+          // TODO: 上传失败后需要同步 fileList,否则再次上传同一张图片会出现占位bug
           console.log('__ERROR__', err)
           this.$message({ type: 'error', message: err.msg })
           this.isUploading = false
@@ -215,7 +219,6 @@ export default {
         })
     },
     onRemove(index) {
-      // console.log(this.$refs.uploadRef.uploadFiles)
       this.$confirm('确定删除该视频?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

@@ -4,6 +4,7 @@
 
 import * as wsObj from 'wcs-js-sdk'
 import { wcsUploadUrl } from '@/const/global'
+import { getWsUploadToken } from '@/api/common'
 
 /**
  * 网宿上传配置信息
@@ -15,7 +16,7 @@ const extraConfig = {
 }
 
 /**
- * 上传大文件
+ * 创建上传大文件实例
  * @param {string} file 要上传的文件
  * @param {string} token 后台服务器获取的token
  */
@@ -23,6 +24,21 @@ function createWcsUploadObj(file, token) {
   return wsObj.wcsUpload(file, token, wcsUploadUrl, extraConfig)
 }
 
-export default {
-  createWcsUploadObj
+/**
+ * 上传大文件
+ * @param {string} file 需要上传的文件
+ * @return {object} 返回上传文件实例
+ */
+const largeFileUpload = async function(file) {
+  const params = { fileName: file.name }
+  const res = await getWsUploadToken(params)
+  // console.log('-res-', res)
+  const { fileName, token } = res.data
+  const copyFile = new File([file], fileName) // 更改file.name,此处不可直接修改name
+  // 上传实例
+  const uploadObj = createWcsUploadObj(copyFile, token)
+  uploadObj.putFile()
+  return uploadObj
 }
+
+export default largeFileUpload
