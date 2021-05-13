@@ -399,6 +399,13 @@ function getDateRangeItems(type, range) {
   return arr
 }
 
+/**
+ * url域名过滤
+ */
+function domainFilter(url) {
+  return url.replace(/^https?:\/\/[^/]+/, '')
+}
+
 export default {
   // 日期时间格式化
   formatDate,
@@ -437,5 +444,7 @@ export default {
   // 获取一周前零点至今天的前一天23:59:59
   getWeekAgo,
   // 获取最近n天
-  getLatelyDays
+  getLatelyDays,
+  // 域名过滤
+  domainFilter
 }
